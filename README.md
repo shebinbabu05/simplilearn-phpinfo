@@ -12,6 +12,11 @@ git checkout ${GITHUB_BRANCH}
 
 docker image build --file Dockerfile-single-line --tag ${GITHUB_USERNAME}/${GITHUB_PROJECT}:single ./
 docker container run --cpus 0.050 --detach --entrypoint /usr/bin/php --memory 10M --name ${GITHUB_PROJECT}_single --publish 80:8080 --read-only --rm --user nobody --volume ${PWD}/src:/src:ro --workdir /src ${GITHUB_USERNAME}/${GITHUB_PROJECT}:single -f index.php -S 0.0.0.0:8080
+# Where "-f index.php -S 0.0.0.0:8080" is the instructions or ARGS to the entrypoint.
+# Where ${PWD}/src -> NFS / S3 / EFS / remote
+# Where --publish 80:8080 is HOST-PORT:CONTAINER-PORT
+# Where --workdir /src -> is the process's(entrypoint) working directory
+# Where --cpus 0.050 is in millicpus
 
 docker container logs ${GITHUB_PROJECT}_single 
 docker container top ${GITHUB_PROJECT}_single 
